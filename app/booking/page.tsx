@@ -11,6 +11,7 @@ import { ArrowLeft, Calendar, Clock, Home, Waves, Wallet, User, Zap } from "luci
 export default function Booking() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  // ✅ FIXED: Added null check for searchParams
   const machineId = searchParams?.get("id") || null;
 
   const [machine, setMachine] = useState<any>(null);

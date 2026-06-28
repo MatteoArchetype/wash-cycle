@@ -8,8 +8,9 @@ import { CheckCircle, Home, Calendar, ArrowLeft, Clock } from "lucide-react";
 
 export default function PaymentConfirmed() {
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get("bookingId");
-  const payLater = searchParams.get("payLater") === "true";
+  // ✅ FIXED: Add null check with fallback
+  const bookingId = searchParams?.get("bookingId") || null;
+  const payLater = searchParams?.get("payLater") === "true";
   const [booking, setBooking] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -22,6 +23,11 @@ export default function PaymentConfirmed() {
   }, [bookingId]);
 
   async function fetchBooking() {
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from("bookings")
       .select(`
