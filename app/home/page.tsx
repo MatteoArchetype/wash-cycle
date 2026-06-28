@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { Home, Waves, Calendar, Wallet, User, Plus, Bell, Clock } from "lucide-react";
-import { AlertCircle } from "lucide-react";
 
 type Machine = {
   id: string;
@@ -30,7 +29,6 @@ export default function HomePage() {
   const [loading, setLoading] = useState(true);
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update current time every minute
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
@@ -38,7 +36,6 @@ export default function HomePage() {
     return () => clearInterval(timer);
   }, []);
 
-  // Refresh data every 30 seconds
   useEffect(() => {
     fetchAllData();
     const interval = setInterval(fetchAllData, 30000);
@@ -72,22 +69,21 @@ export default function HomePage() {
   }
 
   async function fetchMachines() {
-  const { data, error } = await supabase
-    .from("machines")
-    .select("*")
-    .eq("is_active", true);
+    const { data, error } = await supabase
+      .from("machines")
+      .select("*")
+      .eq("is_active", true);
 
-  if (!error && data) {
-    // Sort: Washer first, then Dryer
-    const sorted = data.sort((a, b) => {
-      // Washer comes before Dryer
-      if (a.type === "washer" && b.type === "dryer") return -1;
-      if (a.type === "dryer" && b.type === "washer") return 1;
-      return 0;
-    });
-    setMachines(sorted);
+    if (!error && data) {
+      // ✅ FIXED: Added type annotation
+      const sorted = data.sort((a: Machine, b: Machine) => {
+        if (a.type === "washer" && b.type === "dryer") return -1;
+        if (a.type === "dryer" && b.type === "washer") return 1;
+        return 0;
+      });
+      setMachines(sorted);
+    }
   }
-}
 
   async function fetchActiveBookings() {
     const { data, error } = await supabase
@@ -246,7 +242,6 @@ export default function HomePage() {
                     </span>
                   </div>
 
-                  {/* Book button inside each machine card */}
                   {isAvailable ? (
                     <Link href={`/booking?id=${machine.id}`}>
                       <button className="w-full mt-3 py-2.5 bg-[#9DC4E8] text-[#1C3A52] rounded-xl font-medium text-sm hover:opacity-80 transition-all flex items-center justify-center gap-1">
@@ -266,12 +261,6 @@ export default function HomePage() {
           )}
         </div>
       </div>
-      <Link href="/report-problem">
-  <button className="text-sm text-[#8A7060] flex items-center gap-1 hover:text-[#3A2D22] transition-all">
-    <AlertCircle size={14} />
-    Report a problem
-  </button>
-</Link>
 
       {/* Bottom navigation */}
       <div className="bottom-nav">

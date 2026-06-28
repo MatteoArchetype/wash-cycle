@@ -1,12 +1,9 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
-
 import { useState, useEffect } from "react";
-import NextLink from "next/link";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowLeft, Calendar, Clock, X, Home, Waves, Wallet, User, Play, RefreshCw } from "lucide-react";
-const Link = NextLink as any;
 
 type Booking = {
   id: string;
@@ -68,7 +65,8 @@ export default function Bookings() {
       console.error("Error fetching bookings:", error);
       setBookings([]);
     } else {
-      const enhanced = (data || []).map((b: { start_time: string | number | Date; machine_id: any; }, index: any, arr: any[]) => {
+      // ✅ FIXED: Added type annotation
+      const enhanced = (data || []).map((b: any, index: number, arr: any[]) => {
         const isRecurring = arr.some((other, i) => {
           if (i === index) return false;
           const bTime = new Date(b.start_time);

@@ -32,8 +32,8 @@ export default function Machines() {
     if (error) {
       console.error("Error fetching machines:", error);
     } else {
-      // Sort: Washer first, then Dryer
-      const sorted = (data || []).sort((a, b) => {
+      // ✅ FIXED: Added type annotation
+      const sorted = (data || []).sort((a: Machine, b: Machine) => {
         if (a.type === "washer" && b.type === "dryer") return -1;
         if (a.type === "dryer" && b.type === "washer") return 1;
         return 0;
