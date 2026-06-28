@@ -1,10 +1,12 @@
+export const dynamic = 'force-dynamic';
+
 "use client";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
-import { ArrowLeft, CreditCard, Calendar, Lock, CheckCircle } from "lucide-react";
+import { ArrowLeft, CreditCard, Calendar, Lock } from "lucide-react";
 
 export default function AddCard() {
   const router = useRouter();
@@ -15,7 +17,6 @@ export default function AddCard() {
   const [setAsDefault, setSetAsDefault] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
 
   const formatCardNumber = (value: string) => {
     const digits = value.replace(/\D/g, "");
@@ -42,8 +43,13 @@ export default function AddCard() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Validation
+
+    // Check if supabase is available
+    if (!supabase) {
+      setError("Please wait for the app to initialize");
+      return;
+    }
+
     const cardDigits = cardNumber.replace(/\s/g, "");
     if (cardDigits.length < 15 || cardDigits.length > 16) {
       setError("Please enter a valid card number (15-16 digits)");
@@ -84,7 +90,6 @@ export default function AddCard() {
       const cardBrand = detectCardBrand(cardNumber);
       const lastFour = cardDigits.slice(-4);
 
-      // If setting as default, unset other defaults
       if (setAsDefault) {
         await supabase
           .from("payment_methods")
@@ -92,7 +97,6 @@ export default function AddCard() {
           .eq("user_id", user.id);
       }
 
-      // Save card
       const { error: insertError } = await supabase
         .from("payment_methods")
         .insert({
@@ -111,10 +115,7 @@ export default function AddCard() {
         return;
       }
 
-      setSuccess(true);
-      setTimeout(() => {
-        router.push("/wallet");
-      }, 2000);
+      router.push("/wallet");
     } catch (err) {
       console.error("Error:", err);
       setError("Something went wrong. Please try again.");
@@ -122,21 +123,6 @@ export default function AddCard() {
 
     setSubmitting(false);
   };
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-[#FAF4EC] flex flex-col items-center justify-center px-6">
-        <div className="text-center">
-          <div className="w-24 h-24 bg-[#1B5E20]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle size={48} className="text-[#1B5E20]" />
-          </div>
-          <h1 className="text-2xl font-bold text-[#3A2D22] mb-2">Card Added! 💳</h1>
-          <p className="text-[#8A7060]">Your payment method has been saved.</p>
-          <p className="text-[#8A7060] text-sm mt-1">Redirecting to wallet...</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#FAF4EC] px-6 py-8">
@@ -156,7 +142,6 @@ export default function AddCard() {
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Cardholder Name */}
           <div>
             <label className="block text-sm font-medium text-[#6A5545] mb-1.5">
               Cardholder Name
@@ -171,7 +156,6 @@ export default function AddCard() {
             />
           </div>
 
-          {/* Card Number */}
           <div>
             <label className="block text-sm font-medium text-[#6A5545] mb-1.5">
               Card Number
@@ -188,14 +172,8 @@ export default function AddCard() {
                 required
               />
             </div>
-            <div className="mt-1 text-xs text-[#8A7060]">
-              {cardNumber.replace(/\s/g, "").length > 0 && (
-                <span>🔒 {detectCardBrand(cardNumber)} •••• {cardNumber.replace(/\s/g, "").slice(-4)}</span>
-              )}
-            </div>
           </div>
 
-          {/* Expiry + CVV */}
           <div className="flex gap-4">
             <div className="flex-1">
               <label className="block text-sm font-medium text-[#6A5545] mb-1.5">
@@ -233,7 +211,6 @@ export default function AddCard() {
             </div>
           </div>
 
-          {/* Set as default */}
           <button
             type="button"
             onClick={() => setSetAsDefault(!setAsDefault)}
@@ -245,7 +222,6 @@ export default function AddCard() {
             </div>
           </button>
 
-          {/* Security notice */}
           <div className="flex items-center gap-2 text-xs text-[#8A7060]">
             <Lock size={14} />
             <span>Your card details are encrypted and secure</span>

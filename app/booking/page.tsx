@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -85,6 +87,12 @@ export default function Booking() {
   }, [selectedDate, selectedTime]);
 
   async function fetchMachine() {
+    // Check if supabase is available
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
     const { data, error } = await supabase
       .from("machines")
@@ -150,6 +158,12 @@ export default function Booking() {
 
     if (!selectedDate) {
       alert("Please select a date");
+      return;
+    }
+
+    // Check if supabase is available
+    if (!supabase) {
+      alert("Please wait for the app to initialize");
       return;
     }
 

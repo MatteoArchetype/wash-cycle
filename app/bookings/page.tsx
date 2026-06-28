@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -33,6 +35,12 @@ export default function Bookings() {
   }, []);
 
   async function fetchBookings() {
+    // Check if supabase is available
+    if (!supabase) {
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
 
     const { data: userData } = await supabase.auth.getUser();
@@ -391,7 +399,6 @@ export default function Bookings() {
         )}
       </div>
 
-      {/* Bottom navigation */}
       <div className="bottom-nav">
         <div className="max-w-[428px] mx-auto flex justify-around">
           <Link href="/home" className="nav-item">
