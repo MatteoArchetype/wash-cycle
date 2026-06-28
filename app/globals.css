@@ -1,26 +1,169 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* ── Radius ── */
+    --radius: 0.5rem;
+
+    /* ── Font ── */
+    --font-sans: 'DM Sans', system-ui, sans-serif;
+
+    /* ── Warm sand palette ── */
+    --wash-bg: #FAF4EC;
+    --wash-dark: #3A2D22;
+    --wash-mid: #6A5545;
+    --wash-muted: #8A7060;
+    --wash-light: #B09A87;
+    --wash-lighter: #C8B8A8;
+    --wash-border: #E0CEBC;
+    --wash-border-sub: #EDE0D0;
+    --wash-card: rgba(255,252,210,0.52);
+    --wash-card-deep: rgba(255,250,195,0.70);
+    --wash-sand: #F0E8DC;
+    --wash-sand-deep: #E8D8C4;
+
+    /* ── Blue action palette ── */
+    --wash-blue-primary: #9DC4E8;
+    --wash-blue-light: #C8E2F5;
+    --wash-blue-text: #1C3A52;
+    --wash-blue-nav-active: #4A8FBF;
+    --wash-blue-nav-inactive: #7AAED4;
+
+    /* ── Green ── */
+    --wash-green: #1B5E20;
+
+    /* ── Visual effects ── */
+    --blur-card: blur(8px);
+    --blur-nav: blur(12px);
+    --blur-modal: blur(16px);
+    --shadow-fab: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-modal: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --blob-blur: blur(72px);
+  }
+
+  body {
+    @apply bg-[#FAF4EC] text-[#3A2D22] antialiased;
+    font-family: var(--font-sans);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply bg-[#9DC4E8] text-[#1C3A52] px-6 py-3 rounded-xl font-medium hover:opacity-80 transition-all;
+  }
+  
+  .btn-secondary {
+    @apply bg-[#C8E2F5] text-[#1C3A52] px-6 py-3 rounded-xl font-medium hover:opacity-80 transition-all;
+  }
+  
+  .btn-sand {
+    @apply bg-[#F0E8DC] text-[#3A2D22] px-6 py-3 rounded-xl font-medium hover:opacity-80 transition-all;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-[#E0CEBC] text-[#3A2D22] px-6 py-3 rounded-xl font-medium hover:bg-[#F0E8DC] transition-all;
+  }
+  
+  /* ── Cards ── */
+  .card {
+    @apply bg-[rgba(255,252,210,0.52)] border border-[#E0CEBC] rounded-2xl p-4;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  .card-deep {
+    @apply bg-[rgba(255,250,195,0.70)] border border-[#E0CEBC] rounded-2xl p-4;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  /* ── Bottom navigation ── */
+  .bottom-nav {
+    @apply fixed bottom-0 left-0 right-0 bg-[rgba(255,250,195,0.70)] border-t border-[#EDE0D0] px-6 py-2;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  /* ── Modal sheets ── */
+  .modal-sheet {
+    @apply bg-[rgba(255,250,195,0.85)] border border-[#E0CEBC] rounded-2xl p-6;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: var(--shadow-modal);
+  }
+
+  /* ── FAB button ── */
+  .fab {
+    @apply bg-[#9DC4E8] text-[#1C3A52] rounded-full p-4;
+    box-shadow: var(--shadow-fab);
+  }
+
+  /* ── Background blobs ── */
+  .blob {
+    filter: blur(72px);
+    opacity: 0.22;
+    pointer-events: none;
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  .blob-soft {
+    filter: blur(90px);
+    opacity: 0.22;
+    pointer-events: none;
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  /* ── Form inputs ── */
+  .input {
+    @apply w-full px-4 py-3.5 bg-[rgba(255,252,210,0.52)] border border-[#E0CEBC] rounded-xl text-[#3A2D22];
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .input:focus {
+    @apply outline-none ring-2 ring-[#9DC4E8];
+  }
+
+  .input-error {
+    @apply border-[#F5A0A0] bg-[rgba(255,240,240,0.6)];
+  }
+
+  /* ── Badges ── */
+  .badge-success {
+    @apply px-3 py-1 bg-[#1B5E20]/10 text-[#1B5E20] text-xs rounded-full;
+  }
+
+  .badge-busy {
+    @apply px-3 py-1 bg-[#8A7060]/10 text-[#8A7060] text-xs rounded-full;
+  }
+
+  .badge-confirmed {
+    @apply px-3 py-1 bg-[#1B5E20]/10 text-[#1B5E20] text-xs rounded-full;
+  }
+
+  .badge-completed {
+    @apply px-3 py-1 bg-[#8A7060]/10 text-[#8A7060] text-xs rounded-full;
+  }
+
+  /* ── Navigation items ── */
+  .nav-item {
+    @apply flex flex-col items-center py-1 text-[#7AAED4];
+  }
+
+  .nav-item-active {
+    @apply flex flex-col items-center py-1 text-[#4A8FBF];
+  }
+
+  .nav-label {
+    @apply text-xs;
+  }
+
+  .nav-label-active {
+    @apply text-xs font-medium;
+  }
 }
