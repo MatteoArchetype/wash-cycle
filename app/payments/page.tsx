@@ -9,7 +9,7 @@ import { ArrowLeft, Smartphone, Wallet, Home, Waves, Calendar, User, Plus } from
 export default function Payments() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const bookingId = searchParams.get("bookingId");
+  const bookingId = searchParams?.get("bookingId");
 
   const [selected, setSelected] = useState<string | null>(null);
   const [balance, setBalance] = useState(0);

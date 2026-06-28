@@ -1,8 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Remove the entire eslint block
-  typescript: {
-    ignoreBuildErrors: true,
+  reactStrictMode: true,
+  // Tell Next.js to use the App Router
+  experimental: {
+    appDir: true,
   },
 };
 

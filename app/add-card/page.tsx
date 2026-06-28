@@ -1,10 +1,9 @@
-export const dynamic = 'force-dynamic';
-
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useRouter } from "next/router";
 import { supabase } from "@/lib/supabase";
 import { ArrowLeft, CreditCard, Calendar, Lock } from "lucide-react";
 
@@ -44,7 +43,6 @@ export default function AddCard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Check if supabase is available
     if (!supabase) {
       setError("Please wait for the app to initialize");
       return;
@@ -127,10 +125,10 @@ export default function AddCard() {
   return (
     <div className="min-h-screen bg-[#FAF4EC] px-6 py-8">
       <div className="max-w-sm mx-auto">
-        <Link href="/wallet" className="inline-flex items-center text-[#3A2D22] mb-6">
+        <a href="/wallet" className="inline-flex items-center text-[#3A2D22] mb-6">
           <ArrowLeft size={20} className="mr-1" />
           Back
-        </Link>
+        </a>
 
         <h1 className="text-2xl font-bold text-[#3A2D22] mb-2">Add Payment Method</h1>
         <p className="text-[#8A7060] mb-6">Securely save your card for future payments</p>
