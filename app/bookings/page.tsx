@@ -1,6 +1,6 @@
-export const dynamic = 'force-dynamic';
-
 "use client";
+
+export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
@@ -35,7 +35,6 @@ export default function Bookings() {
   }, []);
 
   async function fetchBookings() {
-    // Check if supabase is available
     if (!supabase) {
       setLoading(false);
       return;
@@ -68,7 +67,6 @@ export default function Bookings() {
       console.error("Error fetching bookings:", error);
       setBookings([]);
     } else {
-      // Mark recurring bookings (same time on different days)
       const enhanced = (data || []).map((b, index, arr) => {
         const isRecurring = arr.some((other, i) => {
           if (i === index) return false;

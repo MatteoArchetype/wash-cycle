@@ -1,6 +1,6 @@
-export const dynamic = 'force-dynamic';
-
 "use client";
+
+export const dynamic = 'force-dynamic';
 
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -41,23 +41,19 @@ export default function Booking() {
     const selectedDateObj = selectedDate ? new Date(selectedDate) : null;
     const isToday = selectedDateObj && selectedDateObj.toDateString() === now.toDateString();
 
-    // Generate all slots from 9 AM to 8 PM
     for (let hour = 9; hour <= 20; hour++) {
       const period = hour >= 12 ? "PM" : "AM";
       const displayHour = hour > 12 ? hour - 12 : hour;
       
-      // For each hour, add :00 slot
       const slotTime = new Date(selectedDateObj || now);
       slotTime.setHours(hour, 0, 0, 0);
       
-      // If it's today, only show future slots
       if (isToday && slotTime < now) {
         // Skip past slots
       } else {
         slots.push(`${displayHour}:00 ${period}`);
       }
       
-      // Add :30 slot if not the last hour
       if (hour < 20) {
         const slotTime30 = new Date(selectedDateObj || now);
         slotTime30.setHours(hour, 30, 0, 0);
@@ -70,7 +66,6 @@ export default function Booking() {
     return slots;
   };
 
-  // Generate times based on selected date
   const times = generateTimeSlots();
 
   useEffect(() => {
@@ -79,7 +74,6 @@ export default function Booking() {
     }
   }, [machineId]);
 
-  // Update times when date changes
   useEffect(() => {
     if (selectedDate && selectedTime) {
       checkIfNow(selectedTime, selectedDate);
@@ -87,7 +81,6 @@ export default function Booking() {
   }, [selectedDate, selectedTime]);
 
   async function fetchMachine() {
-    // Check if supabase is available
     if (!supabase) {
       setLoading(false);
       return;
@@ -107,7 +100,6 @@ export default function Booking() {
       const todayStr = dates[0].toDateString();
       setSelectedDate(todayStr);
       
-      // Auto-select first available time
       const availableTimes = generateTimeSlots();
       if (availableTimes.length > 0) {
         setSelectedTime(availableTimes[0]);
@@ -142,7 +134,6 @@ export default function Booking() {
 
   function handleDateSelect(dateStr: string) {
     setSelectedDate(dateStr);
-    // Reset selected time when date changes
     const availableTimes = generateTimeSlots();
     if (availableTimes.length > 0) {
       setSelectedTime(availableTimes[0]);
@@ -161,7 +152,6 @@ export default function Booking() {
       return;
     }
 
-    // Check if supabase is available
     if (!supabase) {
       alert("Please wait for the app to initialize");
       return;
