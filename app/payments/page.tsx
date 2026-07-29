@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowLeft, Smartphone, Wallet, Home, Waves, Calendar, User, Plus } from "lucide-react";
 
-export default function Payments() {
+function PaymentsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const bookingId = searchParams?.get("bookingId");
@@ -298,5 +298,19 @@ export default function Payments() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Payments() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF4EC] flex items-center justify-center">
+          <div className="text-[#8A7060]">Loading...</div>
+        </div>
+      }
+    >
+      <PaymentsContent />
+    </Suspense>
   );
 }
