@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { CheckCircle, Home, Calendar, ArrowLeft, Clock } from "lucide-react";
 
-export default function PaymentConfirmed() {
+function PaymentConfirmedContent() {
   const searchParams = useSearchParams();
   // ✅ FIXED: Add null check with fallback
   const bookingId = searchParams?.get("bookingId") || null;
@@ -119,5 +119,19 @@ export default function PaymentConfirmed() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentConfirmed() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#FAF4EC] flex items-center justify-center">
+          <div className="text-[#8A7060]">Loading...</div>
+        </div>
+      }
+    >
+      <PaymentConfirmedContent />
+    </Suspense>
   );
 }
