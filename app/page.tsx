@@ -30,7 +30,7 @@ export default function Welcome() {
               Log In
             </button>
           </Link>
-          <Link href="/onboarding">
+          <Link href="/signup">
             <button className="w-full py-4 px-6 border-2 border-[#E0CEBC] text-[#3A2D22] rounded-2xl font-semibold text-lg hover:bg-[#F0E8DC] transition-all">
               Sign Up
             </button>
