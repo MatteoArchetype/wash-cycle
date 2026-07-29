@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import RegisterServiceWorker from "./register-sw";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
@@ -36,6 +37,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <main className="max-w-[428px] mx-auto min-h-screen bg-[#FAF4EC]">
+         <RegisterServiceWorker />
           {children}
         </main>
       </body>
