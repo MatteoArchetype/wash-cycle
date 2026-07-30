@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import { ArrowLeft, Calendar, Clock, Home, Waves, Wallet, User, Zap } from "lucide-react";
 
-export default function Booking() {
+function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const machineId = searchParams?.get("id") || null;
@@ -30,6 +30,13 @@ export default function Booking() {
     }
     return dates;
   };
+  export default function Booking() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#FAF4EC] flex items-center justify-center"><div className="text-[#8A7060]">Loading...</div></div>}>
+      <BookingContent />
+    </Suspense>
+  );
+}
 
   const dates = getDates();
 
